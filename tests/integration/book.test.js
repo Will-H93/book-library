@@ -3,7 +3,12 @@ const { expect } = require("chai");
 const { Book } = require("../../src/models");
 const app = require("../../src/app");
 const dataFactory = require("../helpers/dataFactory");
-const { postBook, getBooks, getBookById, updateBook } = require("../helpers/bookHelper")
+const {
+  postBook,
+  getBooks,
+  getBookById,
+  updateBook,
+} = require("../helpers/bookHelper");
 
 describe("/books", () => {
   before(async () => Book.sequelize.sync());
@@ -17,7 +22,7 @@ describe("/books", () => {
       it("creates a book", async () => {
         const bookData = dataFactory.bookData();
 
-        const { status, body } = await postBook(app, bookData)
+        const { status, body } = await postBook(app, bookData);
 
         expect(status).to.equal(201);
         expect(body.title).to.equal(bookData.title);
@@ -36,7 +41,7 @@ describe("/books", () => {
   });
 
   describe("with records in the database", () => {
-    let books
+    let books;
 
     beforeEach(async () => {
       const bookExamples = [];
@@ -52,7 +57,7 @@ describe("/books", () => {
 
     describe("GET /books", () => {
       it("gets all books records", async () => {
-        const response = await getBooks(app)
+        const response = await getBooks(app);
 
         expect(response.status).to.equal(200);
         expect(response.body.length).to.equal(3);
@@ -70,15 +75,14 @@ describe("/books", () => {
 
     describe("GET /books/:id", () => {
       it("gets book records by id", async () => {
-        const book = books[0]
-        const response = await getBookById(app, book)
+        const book = books[0];
+        const response = await getBookById(app, book);
 
         expect(response.status).to.equal(200);
         expect(response.body.title).to.equal(book.title);
         expect(response.body.author).to.equal(book.author);
         expect(response.body.genre).to.equal(book.genre);
         expect(response.body.isbn).to.equal(book.isbn);
-
       });
 
       it("returns a 404 if the reader does not exist", async () => {
@@ -93,8 +97,8 @@ describe("/books", () => {
       it("updates books isbn by id", async () => {
         const book = books[0];
         const newIsbn = dataFactory.bookData.isbn;
-        const response = await updateBook(app, book, newIsbn)
-          
+        const response = await updateBook(app, book, newIsbn);
+
         const updatedReaderRecord = await Book.findByPk(book.id, {
           raw: true,
         });
@@ -104,7 +108,7 @@ describe("/books", () => {
       });
 
       it("returns a 404 if the reader does not exist", async () => {
-        const response = await updateBook(app, 12345, 0)
+        const response = await updateBook(app, 12345, 0);
 
         expect(response.status).to.equal(404);
         expect(response.body.error).to.equal("The book could not be found.");

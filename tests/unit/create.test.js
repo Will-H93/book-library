@@ -1,38 +1,36 @@
-const sinon = require('sinon')
+const sinon = require("sinon");
 
-const { create } = require('../../src/controllers/bookController')
-const { Book } = require('../../src/models')
+const { create } = require("../../src/controllers/bookController");
+const { Book } = require("../../src/models");
 
-describe('create', (() => {
-    let req, res
+describe("create", () => {
+  let req, res;
 
-    beforeEach(() => {
-        req = {
-            body: {
-                title: 'The Lord of the Rings',
-                author: 'J.R.R Tolkien',
-                genre: 'Fantasy',
-                isbn: '978-0261103252'
-            }
-        }
+  beforeEach(() => {
+    req = {
+      body: {
+        title: "The Lord of the Rings",
+        author: "J.R.R Tolkien",
+        genre: "Fantasy",
+        isbn: "978-0261103252",
+      },
+    };
 
-        res = {
-            status: () => {
-                () => {
+    res = {
+      status: () => {
+        () => {};
+      },
+    };
+  });
+  afterEach(() => {
+    sinon.restore();
+  });
 
-                }
-            }
-        }
-    })
-    afterEach(() => {
-        sinon.restore()
-    })
+  it("spy", () => {
+    const createdSpy = sinon.spy(Book, "create");
 
-    it('spy', () => {
-        const createdSpy = sinon.spy(Book, 'create')
+    create(req, res);
 
-        create(req, res)
-
-        sinon.assert.calledOnce(createdSpy)
-    })
-}))
+    sinon.assert.calledOnce(createdSpy);
+  });
+});
