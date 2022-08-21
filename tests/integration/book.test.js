@@ -8,6 +8,7 @@ const {
   getBooks,
   getBookById,
   updateBook,
+  deleteById,
 } = require("../helpers/bookHelper");
 
 describe("/books", () => {
@@ -76,6 +77,7 @@ describe("/books", () => {
     describe("GET /books/:id", () => {
       it("gets book records by id", async () => {
         const book = books[0];
+
         const response = await getBookById(app, book);
 
         expect(response.status).to.equal(200);
@@ -85,7 +87,7 @@ describe("/books", () => {
         expect(response.body.isbn).to.equal(book.isbn);
       });
 
-      it("returns a 404 if the reader does not exist", async () => {
+      it("returns a 404 if the book does not exist", async () => {
         const response = await getBookById(app, 12345);
 
         expect(response.status).to.equal(404);
@@ -94,21 +96,44 @@ describe("/books", () => {
     });
 
     describe("PATCH /books/:id", () => {
-      it("updates books isbn by id", async () => {
-        const book = books[0];
-        const newIsbn = dataFactory.bookData.isbn;
-        const response = await updateBook(app, book, newIsbn);
+      it("updates books by id", async () => {
+        const currentBookInfo = books[0];
 
-        const updatedReaderRecord = await Book.findByPk(book.id, {
+        const newBookInfo = dataFactory.bookData();
+
+        const response = await updateBook(app, currentBookInfo, newBookInfo);
+
+        const updatedReaderRecord = await Book.findByPk(currentBookInfo.id, {
           raw: true,
         });
 
         expect(response.status).to.equal(200);
+        expect(updatedReaderRecord.title).to.equal(response.body.title);
+        expect(updatedReaderRecord.author).to.equal(response.body.author);
+        expect(updatedReaderRecord.author).to.equal(response.body.author);
         expect(updatedReaderRecord.isbn).to.equal(response.body.isbn);
       });
 
-      it("returns a 404 if the reader does not exist", async () => {
+      it("returns a 404 if the book does not exist", async () => {
         const response = await updateBook(app, 12345, 0);
+
+        expect(response.status).to.equal(404);
+        expect(response.body.error).to.equal("The book could not be found.");
+      });
+    });
+
+    describe("DELETE /books/:id", () => {
+      it("deletes book record", async () => {
+        const book = books[0];
+        const response = await deleteById(app, book);
+        const deletedReader = await Book.findByPk(book.id, { raw: true });
+
+        expect(response.status).to.equal(204);
+        expect(deletedReader).to.equal(null);
+      });
+
+      xit("returns a 404 if the book does not exist", async () => {
+        const response = await deleteById(app, 12345);
 
         expect(response.status).to.equal(404);
         expect(response.body.error).to.equal("The book could not be found.");

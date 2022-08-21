@@ -45,11 +45,11 @@ const getBookById = (app, book) => {
   });
 };
 
-const updateBook = (app, book, newIsbn) => {
+const updateBook = (app, currentBookInfo, newBookInfo) => {
   return new Promise((res, rej) => {
     request(app)
-      .get(`/books/${book.id}`)
-      .send({ isbn: newIsbn })
+      .get(`/books/${currentBookInfo.id}`)
+      .send({ newBookInfo })
       .end((err, response) => {
         if (err) {
           rej(err);
@@ -60,4 +60,18 @@ const updateBook = (app, book, newIsbn) => {
   });
 };
 
-module.exports = { postBook, getBooks, getBookById, updateBook };
+const deleteById = (app, book) => {
+  return new Promise((res, rej) => {
+    request(app)
+      .delete(`/books/${book.id}`)
+      .end((err, response) => {
+        if (err) {
+          rej(err);
+        } else {
+          res(response);
+        }
+      });
+  });
+};
+
+module.exports = { postBook, getBooks, getBookById, updateBook, deleteById };
