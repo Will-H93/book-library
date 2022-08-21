@@ -1,6 +1,7 @@
 const sinon = require('sinon')
 
 const { create } = require('../../src/controllers/bookController')
+const { Book } = require('../../src/models')
 
 describe('create', (() => {
     let req, res
@@ -17,7 +18,7 @@ describe('create', (() => {
 
         res = {
             status: () => {
-                body: () => {
+                () => {
 
                 }
             }
@@ -28,7 +29,7 @@ describe('create', (() => {
     })
 
     it('spy', () => {
-        const createdSpy = sinon.spy(create, 'create')
+        const createdSpy = sinon.spy(Book, 'create')
 
         create(req, res)
 

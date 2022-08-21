@@ -100,7 +100,7 @@ describe("/books", () => {
         });
 
         expect(response.status).to.equal(200);
-        expect(updatedReaderRecord.isbn).to.equal(newIsbn);
+        expect(updatedReaderRecord.isbn).to.equal(response.body.isbn);
       });
 
       it("returns a 404 if the reader does not exist", async () => {
