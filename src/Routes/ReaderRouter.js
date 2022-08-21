@@ -1,5 +1,5 @@
 const { Router } = require("express");
-const readerController = require("../controllers/ReaderConroller");
+const readerController = require("../controllers/readerController");
 
 const readerRouter = new Router();
 
