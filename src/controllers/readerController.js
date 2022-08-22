@@ -1,11 +1,19 @@
 const { Reader } = require("../models");
 
 exports.create = async (req, res) => {
-  const dbReader = await Reader.create(req.body);
-  if (!dbReader) {
-    return res.status(404).json({ error: "Reader not created" });
+  try {
+    const dbReader = await Reader.create(req.body);
+    return res.status(201).json(dbReader);
+  } catch (err) {
+    if (err.name === 'SequelizeValidationError') {
+      return res.status(400).json({
+        success: false,
+        msg: err.errors.map(e => e.message)
+      })
+    } else {
+      return res.status(404).json({ error: "Reader not created" });
+    }
   }
-  return res.status(201).json(dbReader);
 };
 
 exports.read = async (req, res) => {
