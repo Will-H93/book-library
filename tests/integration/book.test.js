@@ -38,6 +38,10 @@ describe("/books", () => {
         expect(bookDocument.genre).to.equal(bookData.genre);
         expect(bookDocument.isbn).to.equal(bookData.isbn);
       });
+
+      it("returns an error if name is null", async () => {
+        
+      })
     });
   });
 
