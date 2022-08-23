@@ -48,8 +48,8 @@ const getBookById = (app, book) => {
 const updateBook = (app, currentBookInfo, newBookInfo) => {
   return new Promise((res, rej) => {
     request(app)
-      .get(`/books/${currentBookInfo.id}`)
-      .send({ newBookInfo })
+      .patch(`/books/${currentBookInfo.id}`)
+      .send( newBookInfo )
       .end((err, response) => {
         if (err) {
           rej(err);
