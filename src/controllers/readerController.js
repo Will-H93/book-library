@@ -5,6 +5,7 @@ exports.create = async (req, res) => {
     const dbReader = await Reader.create(req.body);
     return res.status(201).json(dbReader);
   } catch (err) {
+    console.log(err)
     if (err.name === 'SequelizeValidationError') {
       return res.status(400).json({
         success: false,
