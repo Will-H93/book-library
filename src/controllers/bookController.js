@@ -29,28 +29,29 @@ exports.readId = async (req, res) => {
 exports.updateBook = async (req, res) => {
   const bookId = req.params.id;
   const updateData = req.body;
-  
+
   const [updatedRows] = await Book.update(updateData, {
     where: { id: bookId },
   });
   if (!updatedRows) {
     return res
-      .status(404).json({ error: `Book ID (${bookId}) could not be found.` });
+      .status(404)
+      .json({ error: `Book ID (${bookId}) could not be found.` });
   }
   return res.status(200).json({ result: "Book Updated" });
 };
 
 exports.deleteBook = async (req, res) => {
   const bookId = req.params.id;
-  
-  try {
-  const deletedRows = await Book.destroy({ where: { id: bookId } });
 
-  if (!deletedRows) {
-    return res.status(404).json({ error: "The book could not be found." });
+  try {
+    const deletedRows = await Book.destroy({ where: { id: bookId } });
+
+    if (!deletedRows) {
+      return res.status(404).json({ error: "The book could not be found." });
+    }
+    return res.status(204).json({ result: "Book Deleted" });
+  } catch (err) {
+    console.log(err);
   }
-  return res.status(204).json({ result: "Book Deleted" });
-} catch (err){
-  console.log(err)
-}
 };

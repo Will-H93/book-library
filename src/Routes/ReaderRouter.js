@@ -4,7 +4,10 @@ const readerController = require("../controllers/readerController");
 
 const readerRouter = new Router();
 
-const { validateCreateBody, validateUpdateBody } = require("../../middleware/validation")
+const {
+  validateCreateBody,
+  validateUpdateBody,
+} = require("../../middleware/readerValidation");
 
 readerRouter.post("/", validateCreateBody, readerController.create);
 readerRouter.get("/", readerController.read);

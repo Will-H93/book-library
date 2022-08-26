@@ -39,9 +39,35 @@ describe("/books", () => {
         expect(bookDocument.isbn).to.equal(bookData.isbn);
       });
 
-      it("returns an error if name is null", async () => {
-        
-      })
+      it("returns an error if title is empty", async () => {
+        const bookData = dataFactory.bookData();
+
+        const testData = {
+          title: "",
+          author: bookData.author,
+          genre: bookData.genre,
+          isbn: bookData.isbn,
+        };
+
+        const { status, body } = await postBook(app, testData);
+        expect(status).to.equal(400);
+        expect(body).to.equal(`"title" is not allowed to be empty`);
+      });
+
+      it("returns an error if author is empty", async () => {
+        const bookData = dataFactory.bookData();
+
+        const testData = {
+          title: bookData.title,
+          author: "",
+          genre: bookData.genre,
+          isbn: bookData.isbn,
+        };
+
+        const { status, body } = await postBook(app, testData);
+        expect(status).to.equal(400);
+        expect(body).to.equal(`"author" is not allowed to be empty`);
+      });
     });
   });
 
@@ -92,7 +118,7 @@ describe("/books", () => {
       });
 
       it("returns a 404 if the book does not exist", async () => {
-        const response = await getBookById(app, {id: 12345});
+        const response = await getBookById(app, { id: 12345 });
 
         expect(response.status).to.equal(404);
         expect(response.body.error).to.equal("The book could not be found.");
@@ -112,7 +138,7 @@ describe("/books", () => {
         const updatedReaderRecord = await Book.findByPk(currentBookInfo.id, {
           raw: true,
         });
-        
+
         expect(response.status).to.equal(200);
         expect(updatedReaderRecord.title).not.to.equal(readerRecord.title);
         expect(updatedReaderRecord.author).not.to.equal(readerRecord.author);
@@ -121,10 +147,48 @@ describe("/books", () => {
       });
 
       it("returns a 404 if the book does not exist", async () => {
-        const response = await updateBook(app, {id: 12345}, 0);
+        const response = await updateBook(app, { id: 12345 }, 0);
 
         expect(response.status).to.equal(404);
-        expect(response.body.error).to.equal(`Book ID (12345) could not be found.`);
+        expect(response.body.error).to.equal(
+          `Book ID (12345) could not be found.`
+        );
+      });
+
+      it("returns an error if title is empty", async () => {
+        const currentBookInfo = books[0];
+
+        const newBookInfo = dataFactory.bookData();
+
+        const testData = {
+          title: "",
+          author: newBookInfo.author,
+          genre: newBookInfo.genre,
+          isbn: newBookInfo.isbn,
+        };
+
+        const response = await updateBook(app, currentBookInfo, testData);
+
+        expect(response.status).to.equal(400);
+        expect(response.body).to.equal(`"title" is not allowed to be empty`);
+      });
+
+      it("returns an error if author is empty", async () => {
+        const currentBookInfo = books[0];
+
+        const newBookInfo = dataFactory.bookData();
+
+        const testData = {
+          title: newBookInfo.title,
+          author: "",
+          genre: newBookInfo.genre,
+          isbn: newBookInfo.isbn,
+        };
+
+        const response = await updateBook(app, currentBookInfo, testData);
+
+        expect(response.status).to.equal(400);
+        expect(response.body).to.equal(`"author" is not allowed to be empty`);
       });
     });
 
@@ -139,13 +203,10 @@ describe("/books", () => {
       });
 
       it("returns a 404 if the book does not exist", async () => {
-        
-        const response = await deleteById(app, {id: 12345});
-        
+        const response = await deleteById(app, { id: 12345 });
 
         expect(response.status).to.equal(404);
         expect(response.body.error).to.equal("The book could not be found.");
-       
       });
     });
   });

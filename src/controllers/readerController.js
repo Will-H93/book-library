@@ -6,7 +6,7 @@ exports.create = async (req, res) => {
     return res.status(201).json(dbReader);
   } catch (err) {
     if (err) {
-      return res.status(400).json(err)
+      return res.status(400).json(err);
     }
   }
 };

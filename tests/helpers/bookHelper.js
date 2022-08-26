@@ -49,7 +49,7 @@ const updateBook = (app, currentBookInfo, newBookInfo) => {
   return new Promise((res, rej) => {
     request(app)
       .patch(`/books/${currentBookInfo.id}`)
-      .send( newBookInfo )
+      .send(newBookInfo)
       .end((err, response) => {
         if (err) {
           rej(err);

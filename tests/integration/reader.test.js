@@ -37,8 +37,8 @@ describe("/readers", () => {
         });
 
         expect(response.status).to.equal(400);
-        expect(response.body).to.equal(`"name" is not allowed to be empty`)
-      })
+        expect(response.body).to.equal(`"name" is not allowed to be empty`);
+      });
 
       it("returns an error if email not valid", async () => {
         const response = await request(app).post("/readers").send({
@@ -48,8 +48,8 @@ describe("/readers", () => {
         });
 
         expect(response.status).to.equal(400);
-        expect(response.body).to.equal(`"email" must be a valid email`)
-      })
+        expect(response.body).to.equal(`"email" must be a valid email`);
+      });
 
       it("returns an error if password is less than 8 characters", async () => {
         const response = await request(app).post("/readers").send({
@@ -59,8 +59,10 @@ describe("/readers", () => {
         });
 
         expect(response.status).to.equal(400);
-        expect(response.body).to.equal(`"password" length must be at least 8 characters long`)
-      })
+        expect(response.body).to.equal(
+          `"password" length must be at least 8 characters long`
+        );
+      });
     });
   });
 
@@ -74,8 +76,16 @@ describe("/readers", () => {
           email: "future_ms_darcy@gmail.com",
           password: "password",
         }),
-        Reader.create({ name: "Arya Stark", email: "vmorgul@me.com", password: "password" }),
-        Reader.create({ name: "Lyra Belacqua", email: "darknorth123@msn.org", password: "password" }),
+        Reader.create({
+          name: "Arya Stark",
+          email: "vmorgul@me.com",
+          password: "password",
+        }),
+        Reader.create({
+          name: "Lyra Belacqua",
+          email: "darknorth123@msn.org",
+          password: "password",
+        }),
       ]);
     });
 
@@ -143,8 +153,8 @@ describe("/readers", () => {
           .send({ email: "miss_e_bennetgmail.com" });
 
         expect(response.status).to.equal(400);
-        expect(response.body).to.equal(`"email" must be a valid email`)
-      })
+        expect(response.body).to.equal(`"email" must be a valid email`);
+      });
     });
 
     describe("DELETE /readers/:id", () => {
