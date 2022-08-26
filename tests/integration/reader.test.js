@@ -37,7 +37,7 @@ describe("/readers", () => {
         });
 
         expect(response.status).to.equal(400);
-        expect(response.body.msg[0]).to.equal("Must be at least 1 character")
+        expect(response.body).to.equal(`"name" is not allowed to be empty`)
       })
 
       it("returns an error if email not valid", async () => {
@@ -48,7 +48,7 @@ describe("/readers", () => {
         });
 
         expect(response.status).to.equal(400);
-        expect(response.body.msg[0]).to.equal("Validation isEmail on email failed")
+        expect(response.body).to.equal(`"email" must be a valid email`)
       })
 
       it("returns an error if password is less than 8 characters", async () => {
@@ -59,7 +59,7 @@ describe("/readers", () => {
         });
 
         expect(response.status).to.equal(400);
-        expect(response.body.msg[0]).to.equal("Validation is on password failed")
+        expect(response.body).to.equal(`"password" length must be at least 8 characters long`)
       })
     });
   });
@@ -135,6 +135,16 @@ describe("/readers", () => {
         expect(response.status).to.equal(404);
         expect(response.body.error).to.equal("The reader could not be found.");
       });
+
+      it(`doesn't patch if a field isn't valid`, async () => {
+        const reader = readers[0];
+        const response = await request(app)
+          .patch(`/readers/${reader.id}`)
+          .send({ email: "miss_e_bennetgmail.com" });
+
+        expect(response.status).to.equal(400);
+        expect(response.body).to.equal(`"email" must be a valid email`)
+      })
     });
 
     describe("DELETE /readers/:id", () => {
