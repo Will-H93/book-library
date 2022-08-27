@@ -1,5 +1,4 @@
 const { expect } = require("chai");
-
 const { Book } = require("../../src/models");
 const app = require("../../src/app");
 const dataFactory = require("../helpers/dataFactory");
@@ -20,12 +19,12 @@ describe("/books", () => {
 
   describe("with no books in the database", () => {
     describe("POST", () => {
-      it("creates a book", async () => {
+      it.only("creates a book", async () => {
         const bookData = dataFactory.bookData();
 
-        const { status, body } = await postBook(app, bookData);
+        const { res, body } = await postBook(res, bookData);
 
-        expect(status).to.equal(201);
+        expect(res.status).to.equal(201);
         expect(body.title).to.equal(bookData.title);
         expect(body.author).to.equal(bookData.author);
         expect(body.genre).to.equal(bookData.genre);
@@ -39,7 +38,7 @@ describe("/books", () => {
         expect(bookDocument.isbn).to.equal(bookData.isbn);
       });
 
-      it("returns an error if title is empty", async () => {
+      it.only("returns an error if title is empty", async () => {
         const bookData = dataFactory.bookData();
 
         const testData = {
@@ -54,7 +53,7 @@ describe("/books", () => {
         expect(body).to.equal(`"title" is not allowed to be empty`);
       });
 
-      it("returns an error if author is empty", async () => {
+      it.only("returns an error if author is empty", async () => {
         const bookData = dataFactory.bookData();
 
         const testData = {

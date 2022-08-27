@@ -22,15 +22,26 @@ describe("create", () => {
       },
     };
   });
+
   afterEach(() => {
     sinon.restore();
   });
 
-  it("spy", () => {
+  it("is called once with the request body", () => {
     const createdSpy = sinon.spy(Book, "create");
 
     create(req, res);
 
     sinon.assert.calledOnce(createdSpy);
+    sinon.assert.calledWith(createdSpy, req.body)
   });
+
+  it("resolves", () => {
+    const createdStub = sinon.stub(Book, "create").callsFake(() => create)
+    
+    create(req, res)
+
+    sinon.assert.calledWith(createdStub, req.body)
+    sinon.assert.calledWith(createdStub, sinon.match({ title: "The Lord of the Rings" }))
+  })
 });
