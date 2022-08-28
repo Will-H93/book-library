@@ -9,4 +9,12 @@ const bookData = (options = {}) => {
   };
 };
 
-module.exports = { bookData };
+const readerData = (options = {}) => {
+  return {
+    name: options.name || faker.name.fullName(),
+    email: options.email || faker.internet.email(),
+    password: options.password || faker.internet.password(8)
+  };
+};
+
+module.exports = { bookData, readerData };

@@ -2,6 +2,7 @@ const { expect } = require("chai");
 const request = require("supertest");
 const { Reader } = require("../../src/models");
 const app = require("../../src/app");
+const dataFactory = require("../helpers/dataFactory");
 
 describe("/readers", () => {
   before(async () => Reader.sequelize.sync());
@@ -13,10 +14,12 @@ describe("/readers", () => {
   describe("with no records in the database", () => {
     describe("POST /readers", () => {
       it("creates a new reader in the database", async () => {
+        const getReaderData = dataFactory.readerData();
+
         const response = await request(app).post("/readers").send({
-          name: "Elizabeth Bennet",
-          email: "future_ms_darcy@gmail.com",
-          password: "password",
+          name: getReaderData.name,
+          email: getReaderData.email,
+          password: getReaderData.password
         });
 
         const newReaderRecord = await Reader.findByPk(response.body.id, {
@@ -24,16 +27,18 @@ describe("/readers", () => {
         });
 
         expect(response.status).to.equal(201);
-        expect(response.body.name).to.equal("Elizabeth Bennet");
-        expect(newReaderRecord.name).to.equal("Elizabeth Bennet");
-        expect(newReaderRecord.email).to.equal("future_ms_darcy@gmail.com");
+        expect(response.body.name).to.equal(getReaderData.name);
+        expect(newReaderRecord.name).to.equal(getReaderData.name);
+        expect(newReaderRecord.email).to.equal(getReaderData.email);
       });
 
       it("returns an error if name has no characters", async () => {
+        const getReaderData = dataFactory.readerData();
+
         const response = await request(app).post("/readers").send({
           name: "",
-          email: "future_ms_darcy@gmail.com",
-          password: "password",
+          email: getReaderData.email,
+          password: getReaderData.password
         });
 
         expect(response.status).to.equal(400);
@@ -41,10 +46,12 @@ describe("/readers", () => {
       });
 
       it("returns an error if email not valid", async () => {
+        const getReaderData = dataFactory.readerData();
+
         const response = await request(app).post("/readers").send({
-          name: "Elizabeth Bennet",
+          name: getReaderData.name,
           email: "future_ms_darcygmail.com",
-          password: "password",
+          password: getReaderData.password
         });
 
         expect(response.status).to.equal(400);
@@ -52,10 +59,12 @@ describe("/readers", () => {
       });
 
       it("returns an error if password is less than 8 characters", async () => {
+        const getReaderData = dataFactory.readerData();
+
         const response = await request(app).post("/readers").send({
-          name: "Elizabeth Bennet",
-          email: "future_ms_darcy@gmail.com",
-          password: "pass",
+          name: getReaderData.name,
+          email: getReaderData.email,
+          password: "pass"
         });
 
         expect(response.status).to.equal(400);
@@ -70,23 +79,15 @@ describe("/readers", () => {
     let readers;
 
     beforeEach(async () => {
-      readers = await Promise.all([
-        Reader.create({
-          name: "Elizabeth Bennet",
-          email: "future_ms_darcy@gmail.com",
-          password: "password",
-        }),
-        Reader.create({
-          name: "Arya Stark",
-          email: "vmorgul@me.com",
-          password: "password",
-        }),
-        Reader.create({
-          name: "Lyra Belacqua",
-          email: "darknorth123@msn.org",
-          password: "password",
-        }),
-      ]);
+      const readerExamples = [];
+
+      for (let i = 0; i < 3; i++) {
+        readerExamples.push(dataFactory.readerData());
+      }
+
+      readers = await Promise.all(
+        readerExamples.map(async (reader) => Reader.create(reader))
+      );
     });
 
     describe("GET /readers", () => {
