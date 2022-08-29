@@ -23,7 +23,11 @@ const postItem = async (res, model, data) => {
 const getItems = async (res, model) => {
   const Model = getModel(model);
 
-  const dbItem = await Model.findAll();
+  const dbItem = await Model.findAll({
+    attributes: {
+      exclude: ['password']
+    }
+  });
   if (!dbItem) {
     return res.status(404).json({ error: `${model} not found` });
   }
@@ -34,7 +38,11 @@ const getItemById = async (res, model, id) => {
   const Model = getModel(model);
 
   const itemId = id
-  const dbItem = await Model.findByPk(itemId);
+  const dbItem = await Model.findByPk(itemId, {
+    attributes: {
+      exclude: ['password']
+    }
+  });
 
   if (!dbItem) {
     return res.status(404).json({ error: `The ${model} could not be found.` });
