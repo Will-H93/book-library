@@ -1,0 +1,78 @@
+const { Book, Reader } = require("../../src/models");
+
+const getModel = (model) => {
+  const models = {
+    book: Book,
+    reader: Reader,
+  };
+
+  return models[model];
+};
+
+const postItem = async (res, model, data) => {
+  const Model = getModel(model);
+
+  try {
+  const dbItem = await Model.create(data);
+  return res.status(201).json(dbItem);
+  } catch (err) {
+  return res.status(404).json({ error: `${model} not created` });
+  }
+};
+
+const getItems = async (res, model) => {
+  const Model = getModel(model);
+
+  const dbItem = await Model.findAll();
+  if (!dbItem) {
+    return res.status(404).json({ error: `${model} not found` });
+  }
+  return res.status(200).json(dbItem);
+};
+
+const getItemById = async (res, model, id) => {
+  const Model = getModel(model);
+
+  const itemId = id
+  const dbItem = await Model.findByPk(itemId);
+
+  if (!dbItem) {
+    return res.status(404).json({ error: `The ${model} could not be found.` });
+  }
+  return res.status(200).json(dbItem);
+};
+
+const updateItem = async (res, model, body, id) => {
+  const Model = getModel(model);
+
+  const itemId = id;
+  const updateData = body;
+
+  const [updatedRows] = await Model.update(updateData, {
+    where: { id: itemId },
+  });
+  if (!updatedRows) {
+    return res
+      .status(404)
+      .json({ error: `${model} ID (${itemId}) could not be found.` });
+  }
+  return res.status(200).json({ result: `${model} Updated` });
+};
+
+const deleteItemById = async (res, model, id) => {
+  const Model = getModel(model);
+  const itemId = id;
+
+  try {
+    const deletedRows = await Model.destroy({ where: { id: itemId } });
+
+    if (!deletedRows) {
+      return res.status(404).json({ error: `The ${model} could not be found.` });
+    }
+    return res.status(204).json({ result: `${model} Deleted` });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+module.exports = { postItem, getItems, getItemById, updateItem, deleteItemById };

@@ -144,7 +144,7 @@ describe("/readers", () => {
           .send({ email: "some_new_email@gmail.com" });
 
         expect(response.status).to.equal(404);
-        expect(response.body.error).to.equal("The reader could not be found.");
+        expect(response.body.error).to.equal("reader ID (12345) could not be found.");
       });
 
       it(`doesn't patch if a field isn't valid`, async () => {

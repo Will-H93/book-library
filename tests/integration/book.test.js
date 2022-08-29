@@ -151,7 +151,7 @@ describe("/books", () => {
 
         expect(response.status).to.equal(404);
         expect(response.body.error).to.equal(
-          `Book ID (12345) could not be found.`
+          `book ID (12345) could not be found.`
         );
       });
 
