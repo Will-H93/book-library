@@ -19,7 +19,7 @@ describe("/readers", () => {
         const response = await request(app).post("/readers").send({
           name: getReaderData.name,
           email: getReaderData.email,
-          password: getReaderData.password
+          password: getReaderData.password,
         });
 
         const newReaderRecord = await Reader.findByPk(response.body.id, {
@@ -38,7 +38,7 @@ describe("/readers", () => {
         const response = await request(app).post("/readers").send({
           name: "",
           email: getReaderData.email,
-          password: getReaderData.password
+          password: getReaderData.password,
         });
 
         expect(response.status).to.equal(400);
@@ -51,7 +51,7 @@ describe("/readers", () => {
         const response = await request(app).post("/readers").send({
           name: getReaderData.name,
           email: "future_ms_darcygmail.com",
-          password: getReaderData.password
+          password: getReaderData.password,
         });
 
         expect(response.status).to.equal(400);
@@ -64,7 +64,7 @@ describe("/readers", () => {
         const response = await request(app).post("/readers").send({
           name: getReaderData.name,
           email: getReaderData.email,
-          password: "pass"
+          password: "pass",
         });
 
         expect(response.status).to.equal(400);
@@ -146,7 +146,9 @@ describe("/readers", () => {
           .send({ email: "some_new_email@gmail.com" });
 
         expect(response.status).to.equal(404);
-        expect(response.body.error).to.equal("reader ID (12345) could not be found.");
+        expect(response.body.error).to.equal(
+          "reader ID (12345) could not be found."
+        );
       });
 
       it(`doesn't patch if a field isn't valid`, async () => {

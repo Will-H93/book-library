@@ -33,15 +33,18 @@ describe("create", () => {
     create(req, res);
 
     sinon.assert.calledOnce(createdSpy);
-    sinon.assert.calledWith(createdSpy, req.body)
+    sinon.assert.calledWith(createdSpy, req.body);
   });
 
   it("resolves", () => {
-    const createdStub = sinon.stub(Book, "create").callsFake(() => create)
-    
-    create(req, res)
+    const createdStub = sinon.stub(Book, "create").callsFake(() => create);
 
-    sinon.assert.calledWith(createdStub, req.body)
-    sinon.assert.calledWith(createdStub, sinon.match({ title: "The Lord of the Rings" }))
-  })
+    create(req, res);
+
+    sinon.assert.calledWith(createdStub, req.body);
+    sinon.assert.calledWith(
+      createdStub,
+      sinon.match({ title: "The Lord of the Rings" })
+    );
+  });
 });

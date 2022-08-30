@@ -3,8 +3,8 @@ const Joi = require("joi");
 const createBookSchema = Joi.object({
   title: Joi.string().min(2).required(),
   author: Joi.string().min(2).required(),
-  genre: Joi.string(),
-  isbn: Joi.string(),
+  GenreId: Joi.number().min(1),
+  isbn: Joi.string().min(10).required(),
 });
 
 const updateBookSchema = Joi.object({
@@ -16,9 +16,9 @@ const updateBookSchema = Joi.object({
     is: Joi.exist(),
     then: Joi.string().min(2),
   }),
-  genre: Joi.string().when({
+  GenreId: Joi.number().when({
     is: Joi.exist(),
-    then: Joi.string(),
+    then: Joi.number().min(1),
   }),
   isbn: Joi.string().when({
     is: Joi.exist(),

@@ -1,32 +1,44 @@
-const { Book, Reader } = require("../../src/models");
+const { Book, Reader, Genre } = require("../../src/models");
 
 const getModel = (model) => {
   const models = {
     book: Book,
     reader: Reader,
+    genre: Genre,
   };
 
   return models[model];
+};
+
+const getOptions = (model) => {
+  if (model === "book") return { include: Genre };
+
+  if (model === "genre") return { include: Book };
+
+  return {};
 };
 
 const postItem = async (res, model, data) => {
   const Model = getModel(model);
 
   try {
-  const dbItem = await Model.create(data);
-  return res.status(201).json(dbItem);
+    const dbItem = await Model.create(data);
+    return res.status(201).json(dbItem);
   } catch (err) {
-  return res.status(404).json({ error: `${model} not created` });
+    return res.status(404).json({ error: `${model} not created` });
   }
 };
 
 const getItems = async (res, model) => {
   const Model = getModel(model);
 
+  const options = getOptions(model);
+
   const dbItem = await Model.findAll({
+    ...options,
     attributes: {
-      exclude: ['password']
-    }
+      exclude: ["password"],
+    },
   });
   if (!dbItem) {
     return res.status(404).json({ error: `${model} not found` });
@@ -37,11 +49,14 @@ const getItems = async (res, model) => {
 const getItemById = async (res, model, id) => {
   const Model = getModel(model);
 
-  const itemId = id
+  const options = getOptions(model);
+
+  const itemId = id;
   const dbItem = await Model.findByPk(itemId, {
+    ...options,
     attributes: {
-      exclude: ['password']
-    }
+      exclude: ["password"],
+    },
   });
 
   if (!dbItem) {
@@ -75,7 +90,9 @@ const deleteItemById = async (res, model, id) => {
     const deletedRows = await Model.destroy({ where: { id: itemId } });
 
     if (!deletedRows) {
-      return res.status(404).json({ error: `The ${model} could not be found.` });
+      return res
+        .status(404)
+        .json({ error: `The ${model} could not be found.` });
     }
     return res.status(204).json({ result: `${model} Deleted` });
   } catch (err) {
@@ -83,4 +100,10 @@ const deleteItemById = async (res, model, id) => {
   }
 };
 
-module.exports = { postItem, getItems, getItemById, updateItem, deleteItemById };
+module.exports = {
+  postItem,
+  getItems,
+  getItemById,
+  updateItem,
+  deleteItemById,
+};
