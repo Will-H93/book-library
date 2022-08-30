@@ -1,19 +1,20 @@
-const { Book, Reader, Genre } = require("../../src/models");
+const { Book, Reader, Genre, Author } = require("../../src/models");
 
 const getModel = (model) => {
   const models = {
     book: Book,
     reader: Reader,
     genre: Genre,
+    author: Author
   };
 
   return models[model];
 };
 
 const getOptions = (model) => {
-  if (model === "book") return { include: Genre };
+  if (model === "book") return { include: [ Genre, Author ] };
 
-  if (model === "genre") return { include: Book };
+  if (model === "genre" || model === 'author') return { include: Book };
 
   return {};
 };

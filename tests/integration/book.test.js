@@ -18,13 +18,11 @@ describe("/books", () => {
 
         const response = await request(app).post("/books").send({
           title: getBookData.title,
-          author: getBookData.author,
           isbn: getBookData.isbn,
         });
 
         expect(response.status).to.equal(201);
         expect(response.body.title).to.equal(getBookData.title);
-        expect(response.body.author).to.equal(getBookData.author);
         expect(response.body.isbn).to.equal(getBookData.isbn);
 
         const bookDocument = await Book.findByPk(response.body.id, {
@@ -32,7 +30,6 @@ describe("/books", () => {
         });
 
         expect(bookDocument.title).to.equal(getBookData.title);
-        expect(bookDocument.author).to.equal(getBookData.author);
         expect(bookDocument.isbn).to.equal(getBookData.isbn);
       });
 
@@ -41,25 +38,11 @@ describe("/books", () => {
 
         const response = await request(app).post("/books").send({
           title: "",
-          author: bookData.author,
           isbn: bookData.isbn,
         });
 
         expect(response.status).to.equal(400);
         expect(response.body).to.equal(`"title" is not allowed to be empty`);
-      });
-
-      it("returns an error if author is empty", async () => {
-        const bookData = dataFactory.bookData();
-
-        const response = await request(app).post("/books").send({
-          title: bookData.title,
-          author: "",
-          isbn: bookData.isbn,
-        });
-
-        expect(response.status).to.equal(400);
-        expect(response.body).to.equal(`"author" is not allowed to be empty`);
       });
     });
   });
@@ -90,7 +73,6 @@ describe("/books", () => {
           const expected = books.find((a) => a.id === book.id);
 
           expect(book.title).to.equal(expected.title);
-          expect(book.author).to.equal(expected.author);
           expect(book.isbn).to.equal(expected.isbn);
         });
       });
@@ -104,7 +86,6 @@ describe("/books", () => {
 
         expect(response.status).to.equal(200);
         expect(response.body.title).to.equal(book.title);
-        expect(response.body.author).to.equal(book.author);
         expect(response.body.isbn).to.equal(book.isbn);
       });
 
@@ -134,7 +115,6 @@ describe("/books", () => {
 
         expect(response.status).to.equal(200);
         expect(updatedReaderRecord.title).not.to.equal(readerRecord.title);
-        expect(updatedReaderRecord.author).not.to.equal(readerRecord.author);
         expect(updatedReaderRecord.isbn).not.to.equal(readerRecord.isbn);
       });
 
@@ -154,25 +134,11 @@ describe("/books", () => {
 
         const response = await request(app).post("/books").send({
           title: "",
-          author: bookData.author,
           isbn: bookData.isbn,
         });
 
         expect(response.status).to.equal(400);
         expect(response.body).to.equal(`"title" is not allowed to be empty`);
-      });
-
-      it("returns an error if author is empty", async () => {
-        const bookData = dataFactory.bookData();
-
-        const response = await request(app).post("/books").send({
-          title: bookData.title,
-          author: "",
-          isbn: bookData.isbn,
-        });
-
-        expect(response.status).to.equal(400);
-        expect(response.body).to.equal(`"author" is not allowed to be empty`);
       });
     });
 

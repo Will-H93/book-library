@@ -3,7 +3,6 @@ const { faker } = require("@faker-js/faker");
 const bookData = (options = {}) => {
   return {
     title: options.title || faker.lorem.words(),
-    author: options.author || faker.name.fullName(),
     isbn: options.isbn || faker.lorem.word(10),
   };
 };
@@ -22,4 +21,9 @@ const genreData = (options = {}) => {
   };
 };
 
-module.exports = { bookData, readerData, genreData };
+const authorData = (options = {}) => {
+  return {
+    author: options.name || faker.name.fullName(),
+  };
+};
+module.exports = { bookData, readerData, genreData, authorData };
