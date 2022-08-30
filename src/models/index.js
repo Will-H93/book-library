@@ -21,7 +21,7 @@ const setupDatabase = () => {
 
   Reader.hasMany(Book);
   Genre.hasMany(Book);
-  Author.hasMany(Book)
+  Author.hasMany(Book);
   Book.belongsTo(Genre);
   Book.belongsTo(Author);
 
@@ -30,7 +30,7 @@ const setupDatabase = () => {
     Reader,
     Book,
     Genre,
-    Author
+    Author,
   };
 };
 

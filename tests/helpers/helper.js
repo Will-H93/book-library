@@ -5,16 +5,16 @@ const getModel = (model) => {
     book: Book,
     reader: Reader,
     genre: Genre,
-    author: Author
+    author: Author,
   };
 
   return models[model];
 };
 
 const getOptions = (model) => {
-  if (model === "book") return { include: [ Genre, Author ] };
+  if (model === "book") return { include: [Genre, Author] };
 
-  if (model === "genre" || model === 'author') return { include: Book };
+  if (model === "genre" || model === "author") return { include: Book };
 
   return {};
 };
