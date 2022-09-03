@@ -1,6 +1,6 @@
 const sinon = require("sinon");
 
-const { create } = require("../../src/controllers/bookController");
+const { create } = require("../../src/controllers/controller");
 const { Book } = require("../../src/models");
 
 describe("create", () => {
@@ -10,10 +10,9 @@ describe("create", () => {
     req = {
       body: {
         title: "The Lord of the Rings",
-        author: "J.R.R Tolkien",
-        genre: "Fantasy",
         isbn: "978-0261103252",
       },
+      baseUrl: "/books",
     };
 
     res = {
@@ -30,7 +29,7 @@ describe("create", () => {
   it("is called once with the request body", () => {
     const createdSpy = sinon.spy(Book, "create");
 
-    create(req, res);
+    create(req, req.baseUrl.slice(1, -1), res);
 
     sinon.assert.calledOnce(createdSpy);
     sinon.assert.calledWith(createdSpy, req.body);
@@ -39,7 +38,7 @@ describe("create", () => {
   it("resolves", () => {
     const createdStub = sinon.stub(Book, "create").callsFake(() => create);
 
-    create(req, res);
+    create(req, req.baseUrl.slice(1, -1), res);
 
     sinon.assert.calledWith(createdStub, req.body);
     sinon.assert.calledWith(
