@@ -1,16 +1,19 @@
 const express = require("express");
-const allRouter = require("./Routes/allRouter");
+const readerRouter = require("./Routes/readerRouter")
+const bookRouter = require("./Routes/bookRouter")
+const genreRouter = require("./Routes/genreRouter")
+const authorRouter = require("./Routes/authorRouter")
 
 const app = express();
 
 app.use(express.json());
 
-app.use("/readers", allRouter);
+app.use("/readers", readerRouter);
 
-app.use("/books", allRouter);
+app.use("/books", bookRouter);
 
-app.use("/genres", allRouter);
+app.use("/genres", genreRouter);
 
-app.use("/authors", allRouter);
+app.use("/authors", authorRouter);
 
 module.exports = app;
