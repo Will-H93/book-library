@@ -63,3 +63,7 @@ The project implements RESTful routes and allows users to perform CRUD (Create, 
 - Read single: GET to /readers/:readerId
 - Update: PATCH to /readers/readerId
 - Delete: DELETE to /readers/:readerId
+
+## Author
+
+- Will Hodgkinson

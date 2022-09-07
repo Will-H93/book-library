@@ -52,11 +52,14 @@ describe("/books", () => {
 
     beforeEach(async () => {
       const bookExamples = [];
-
-      for (let i = 0; i < 3; i++) {
-        bookExamples.push(dataFactory.bookData());
+      const existingIsbns = [];
+      while (bookExamples.length < 3) {
+        const newBook = dataFactory.bookData();
+        if (!existingIsbns.includes(newBook.isbn)) {
+          bookExamples.push(newBook);
+          existingIsbns.push(newBook.isbn);
+        }
       }
-
       books = await Promise.all(
         bookExamples.map(async (book) => Book.create(book))
       );
@@ -131,29 +134,29 @@ describe("/books", () => {
 
       it("returns an error if title is empty", async () => {
         const currentBookInfo = books[0];
-        
+
         const bookData = dataFactory.bookData();
 
-        const response = await request(app).patch(`/books/${currentBookInfo.id}`).send({
-          title: "",
-          isbn: bookData.isbn,
-        });
+        const response = await request(app)
+          .patch(`/books/${currentBookInfo.id}`)
+          .send({
+            title: "",
+            isbn: bookData.isbn,
+          });
 
         expect(response.status).to.equal(400);
         expect(response.body).to.equal(`"title" is not allowed to be empty`);
       });
-      
-      it("returns an error if isbn isn't unique", async () => {
-        const book1 = books[0]
-        const book2 = books[1]
 
-        
+      it("returns an error if isbn isn't unique", async () => {
+        const book1 = books[0];
+        const book2 = books[1];
+
         const response = await request(app).patch(`/books/${book1.id}`).send({
           isbn: book2.isbn,
         });
 
-        expect(response.status).to.equal(400)
-
+        expect(response.status).to.equal(400);
       });
     });
     describe("DELETE /books/:id", () => {

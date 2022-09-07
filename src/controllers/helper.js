@@ -13,7 +13,6 @@ const getModel = (model) => {
 
 const getOptions = (model) => {
   if (model === "book") return { include: [Genre, Author] };
-
   if (model === "genre" || model === "author") return { include: Book };
 
   return {};
@@ -71,16 +70,14 @@ const updateItem = async (res, model, body, id) => {
 
   const itemId = id;
   const updateData = body;
-  let updatedRows
+  let updatedRows;
   try {
-  [updatedRows] = await Model.update(updateData, {
-    where: { id: itemId },
-  })
+    [updatedRows] = await Model.update(updateData, {
+      where: { id: itemId },
+    });
   } catch (error) {
-    if (error.name === 'SequelizeUniqueConstraintError') {
-      return res
-      .status(400)
-      .json({ error: `isbn must be unique`});
+    if (error.name === "SequelizeUniqueConstraintError") {
+      return res.status(400).json({ error: `isbn must be unique` });
     }
   }
   if (!updatedRows) {

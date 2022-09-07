@@ -8,17 +8,20 @@ const validateCreateBody = async (req, res, next) => {
     createSchema = Joi.object({
       author: Joi.string().min(2).required(),
     });
-  } else if (route === "/genres") {
+  }
+  if (route === "/genres") {
     createSchema = Joi.object({
       genre: Joi.string().min(2).required(),
     });
-  } else if (route === "/readers") {
+  }
+  if (route === "/readers") {
     createSchema = Joi.object({
       name: Joi.string().min(1).required(),
       email: Joi.string().email().required(),
       password: Joi.string().min(8).required(),
     });
-  } else if (route === "/books") {
+  }
+  if (route === "/books") {
     createSchema = Joi.object({
       title: Joi.string().min(2).required(),
       AuthorId: Joi.number().min(1),

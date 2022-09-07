@@ -5,9 +5,9 @@ module.exports = (connection, DataTypes) => {
       type: DataTypes.STRING,
       unique: {
         args: true,
-        msg: "isbn must be unique"
-      }
-    }
+        msg: "isbn must be unique",
+      },
+    },
   };
 
   const bookModel = connection.define("Book", schema);

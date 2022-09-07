@@ -11,7 +11,7 @@ describe("create", () => {
       body: {
         title: "The Lord of the Rings",
         isbn: "978-0261103252",
-      }
+      },
     };
 
     res = {
