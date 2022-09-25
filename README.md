@@ -4,7 +4,7 @@
 
 The Book library API project as part of the Manchester Codes Backend Module
 
-The project implements RESTful routes and allows users to perform CRUD (Create, Read, Update, Delete) operations on artist and albums in a MySQL database.
+The project implements RESTful routes and allows users to perform CRUD (Create, Read, Update, Delete) operations on authors, books, genres and readers in a MySQL database.
 
 ## Installation
 
